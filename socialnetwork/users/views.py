@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.contrib.auth import login, authenticate
-from .forms import SignupForm,LoginForm
+from django.contrib import messages
+from django.contrib.auth import login, authenticate,logout
+from .forms import SignupForm,LoginForm,ProfileForm
 
 def signup_view(request):
     if request.method == 'POST':
@@ -11,8 +12,8 @@ def signup_view(request):
             form.save()
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            return redirect('login/')
+            password = form.cleaned_data['password1']
+            return redirect('login')
     else:
         form = SignupForm()
     return render(request, 'signup.html', {'form': form})
@@ -29,9 +30,18 @@ def login_view(request):
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
-
+def logout_view(request):
+    logout(request)
+    return redirect('home')
 
 @login_required
 def profile_view(request):
-    user = request.user
-    return render(request, 'profile.html', {'user': user})
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save() 
+            messages.success(request, 'اطلاعات پروفایل شما با موفقیت ذخیره شد.')
+            return redirect('profile')  
+    else:
+        form = ProfileForm(instance=request.user)
+    return render(request, 'profile.html', {'form': form})

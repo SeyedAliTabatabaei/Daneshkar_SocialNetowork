@@ -1,19 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پروفایل</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body>
-<div class="container mt-5">
-    <h2>Hello, {{ user.username }}</h2>
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Password:</strong> {{ user.password }}</p>
-    <p><strong>First Name:</strong> {{ user.first_name }}</p>
-    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+{% extends 'base.html' %}
 
-</div>
-</body>
-</html>
+{% block content%}
+<p class="text-success">
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
+</p>
+<form method="post">
+{{ form.as_p }}
+    {% csrf_token %}
+    <button class="btn btn-primary" onclick="success()">ثبت تغییرات</button>
+</form>
+<a href="{% url 'logout' %}"><button class="btn btn-danger ">خروج</button></a>
+
+<button id="editbutton" onclick="enableedit()" class="btn btn-success">ویرایش</button>
+
+<script>
+    function enableedit() {
+        var field = document.getElementById("id_username");
+        field.disabled = false;
+        var field = document.getElementById("id_email");
+        field.disabled = false;
+        var field = document.getElementById("id_first_name");
+        field.disabled = false;
+        var field = document.getElementById("id_last_name");
+        field.disabled = false;
+    }
+
+</script>
+{% endblock %}
