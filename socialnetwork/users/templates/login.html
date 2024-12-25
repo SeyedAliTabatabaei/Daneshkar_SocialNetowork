@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <title>ورود</title>
+</head>
+<body dir="rtl" style="text-align: center !important;">
+    <h2>فرم ورود</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ورود</button>
+    </form>
+</body>
+</html>

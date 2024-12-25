@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت‌نام</title>
+</head>
+<body dir="rtl" style="text-align: center !important;">
+    <h1>فرم ثبت‌نام</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ثبت‌نام</button>
+    </form>
+</body>
+</html>
