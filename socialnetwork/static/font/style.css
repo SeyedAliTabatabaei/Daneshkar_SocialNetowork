@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'mycustomfont';
+    src: url('mycustomfont.woff2') format('woff2'),
+        url('mycustomfont.woff') format('woff'),
+        url('mycustomfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+body,html {
+    font-family: 'mycustomfont' !important;
+}
