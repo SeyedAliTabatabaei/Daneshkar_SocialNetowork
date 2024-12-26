@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate,logout
-from .forms import SignupForm,LoginForm,ProfileForm
+from .forms import SignupForm,LoginForm,ProfileForm,ProfileImage
+from .models import Profile
 
 def signup_view(request):
     if request.method == 'POST':
@@ -37,6 +38,11 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     if request.method == 'POST':
+        form2 = ProfileImage(request.POST, request.FILES,   )
+        if form2.is_valid():
+            savepic = form2.save(commit=False)
+            savepic.user = request.user
+            savepic.save()
         form = ProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save() 
@@ -44,4 +50,10 @@ def profile_view(request):
             return redirect('profile')  
     else:
         form = ProfileForm(instance=request.user)
-    return render(request, 'profile.html', {'form': form})
+        form2 = ProfileImage(instance=request.user)
+    return render(request, 'profile.html', {'form': form,'form2':form2})
+
+#def profileimage_view(request):
+
+
+   # return render(request, 'profile.html', {'form2': form, 'profile': profile})

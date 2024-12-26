@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-
+from .models import Profile
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
@@ -55,4 +55,12 @@ class ProfileForm(forms.ModelForm):
                 'class':'form-control',
                 'disabled':'disabled',
             }),
+        }
+
+class ProfileImage(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_image']
+        widgets = {
+            'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }

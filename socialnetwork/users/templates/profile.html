@@ -9,10 +9,17 @@
     {% endif %}
 </p>
 <form method="post">
-{{ form.as_p }}
     {% csrf_token %}
+    {{ form.as_p }}
     <button class="btn btn-primary" onclick="success()">ثبت تغییرات</button>
 </form>
+<br>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form2.as_p }}
+    <button type="submit">ذخیره</button>
+</form>
+
 <a href="{% url 'logout' %}"><button class="btn btn-danger ">خروج</button></a>
 
 <button id="editbutton" onclick="enableedit()" class="btn btn-success">ویرایش</button>
