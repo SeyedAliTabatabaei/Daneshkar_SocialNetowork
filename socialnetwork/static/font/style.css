@@ -13,3 +13,10 @@ body,html {
 .errorlist {
     color:red !important;
 }
+.round-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd; /* اختیاری: اضافه کردن حاشیه */
+}

@@ -24,6 +24,18 @@
 
 <button id="editbutton" onclick="enableedit()" class="btn btn-success">ویرایش</button>
 
+<br>
+<div>
+    {% load static %}
+    {% if profiledata %}
+
+        <img src="/media/{{ profiledata.profile_image}}" class="round-image" width="150" height="150">
+    {% else %}
+        <img src="/media/profile_images/default.png"  width="150" height="150">
+    {% endif %}
+</div>
+<br>
+
 <script>
     function enableedit() {
         var field = document.getElementById("id_username");

@@ -51,7 +51,11 @@ def profile_view(request):
     else:
         form = ProfileForm(instance=request.user)
         form2 = ProfileImage(instance=request.user)
-    return render(request, 'profile.html', {'form': form,'form2':form2})
+    try:
+        profiledata = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        profiledata = None
+    return render(request, 'profile.html', {'form': form,'form2':form2, 'profiledata':profiledata})
 
 #def profileimage_view(request):
 
