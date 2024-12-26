@@ -60,7 +60,7 @@ class ProfileForm(forms.ModelForm):
 class ProfileImage(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_image']
+        fields = ['profile_image',]
         widgets = {
             'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }

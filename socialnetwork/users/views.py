@@ -37,27 +37,44 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    if request.method == 'POST':
-        form2 = ProfileImage(request.POST, request.FILES,   )
-        if form2.is_valid():
-            savepic = form2.save(commit=False)
-            savepic.user = request.user
-            savepic.save()
-        form = ProfileForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save() 
-            messages.success(request, 'اطلاعات پروفایل شما با موفقیت ذخیره شد.')
-            return redirect('profile')  
-    else:
-        form = ProfileForm(instance=request.user)
-        form2 = ProfileImage(instance=request.user)
     try:
         profiledata = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
         profiledata = None
-    return render(request, 'profile.html', {'form': form,'form2':form2, 'profiledata':profiledata})
-
+    if request.method == 'POST':
+        submitbutton = request.POST.get("submit_button")
+        if submitbutton == "form2":
+            form2 = ProfileImage(request.POST, request.FILES, instance=profiledata)
+            if form2.is_valid():
+                savepic = form2.save(commit=False)
+                savepic.user = request.user
+                savepic.save()
+                return redirect("profile")
+            else:
+                form2 = ProfileImage(instance=profiledata)
+        if submitbutton == "form1":
+            form = ProfileForm(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save() 
+                messages.success(request, 'اطلاعات پروفایل شما با موفقیت ذخیره شد.')
+                return redirect('profile')  
+    else:
+        form = ProfileForm(instance=request.user)
+        form2 = ProfileImage(instance=profiledata)
+    try:
+        form
+    except NameError:
+        pass
+    else:
+        try:
+            form2
+        except NameError:
+            return render(request, 'profile.html', {'form': form})
+        else:
+            return render(request, 'profile.html', {'form': form,'form2':form2, 'profiledata':profiledata})
+ 
 #def profileimage_view(request):
+
 
 
    # return render(request, 'profile.html', {'form2': form, 'profile': profile})

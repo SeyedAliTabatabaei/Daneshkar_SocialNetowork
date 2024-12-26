@@ -12,6 +12,7 @@
         {% if user.is_authenticated %}
           <li class="nav-item">   
             <a class="nav-link" href="{% url 'profile' %}">پروفایل  / <b><span style="font-size: 12px;">{{ user.username }}</span></b></a>
+            <img src=" {{users_profile.profile_image}} ">
           </li>
         {% else %}
         <li class="nav-item">

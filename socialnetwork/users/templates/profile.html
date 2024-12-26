@@ -8,21 +8,24 @@
         {% endfor %}
     {% endif %}
 </p>
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button class="btn btn-primary" onclick="success()">ثبت تغییرات</button>
+    <button class="btn btn-primary" id="submitedit" name="submit_button" value="form1">ثبت تغییرات</button>
+    <button id="editbutton" onclick="enableedit()" class="btn btn-success">ویرایش</button>
+    
 </form>
+
 <br>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form2.as_p }}
-    <button type="submit">ذخیره</button>
+    <button type="submit" name="submit_button" value="form2">ذخیره</button>
 </form>
 
 <a href="{% url 'logout' %}"><button class="btn btn-danger ">خروج</button></a>
 
-<button id="editbutton" onclick="enableedit()" class="btn btn-success">ویرایش</button>
 
 <br>
 <div>
@@ -37,7 +40,10 @@
 <br>
 
 <script>
+    document.getElementById("submitedit").disabled = true 
     function enableedit() {
+        document.getElementById("editbutton").disabled = true
+        document.getElementById("submitedit").disabled = false
         var field = document.getElementById("id_username");
         field.disabled = false;
         var field = document.getElementById("id_email");
