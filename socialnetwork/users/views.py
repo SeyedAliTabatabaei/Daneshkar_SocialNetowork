@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate,logout
-from .forms import SignupForm,LoginForm,ProfileForm,ProfileImage
+from .forms import SignupForm,LoginForm,ProfileForm,ProfileImage,postform
 from .models import Profile
 
 def signup_view(request):
@@ -72,9 +72,15 @@ def profile_view(request):
             return render(request, 'profile.html', {'form': form})
         else:
             return render(request, 'profile.html', {'form': form,'form2':form2, 'profiledata':profiledata})
- 
-#def profileimage_view(request):
 
-
-
-   # return render(request, 'profile.html', {'form2': form, 'profile': profile})
+def write_view(request):
+    if request.method == 'POST':
+        form = postform(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("پست منتشر شد")
+        else:
+            print(form.errors)
+    else:
+        form = postform()
+    return render(request, 'write.html', {'form':form})

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>
+    پست جدید
+</h1>
+<hr>
+{{ message }}
+<form method="post">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success" >انتشار</button>
+</form> 
+
+{% endblock %}

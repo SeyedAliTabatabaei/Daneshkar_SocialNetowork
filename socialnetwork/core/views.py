@@ -1,12 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from users.models import Profile
+from users.models import Post,Profile
 
 
-@login_required
 def home(request):
-    try:
-        profiles = Profile.objects.get(user=request.user)
-    except:
-        profiles = None
-    return render(request, 'home.html', {'profile':profiles})
+    posts = Post.objects.all().order_by('-created_at')
+    return render(request, 'home.html', {'posts':posts})
+

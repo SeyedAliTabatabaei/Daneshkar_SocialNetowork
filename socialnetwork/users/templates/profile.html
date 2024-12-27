@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content%}
+<h1>
+    پروفایل کاربری
+</h1>
+<hr>
 <p class="text-success">
     {% if messages %}
         {% for message in messages %}
@@ -18,18 +22,9 @@
 </form>
 
 <br>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form2.as_p }}
-    <button type="submit" name="submit_button" value="form2">ذخیره</button>
-</form>
-
-<a href="{% url 'logout' %}"><button class="btn btn-danger ">خروج</button></a>
-
-
+<hr>
 <br>
 <div>
-    {% load static %}
     {% if profiledata %}
 
         <img src="/media/{{ profiledata.profile_image}}" class="round-image" width="150" height="150">
@@ -37,7 +32,14 @@
         <img src="/media/profile_images/default.png"  width="150" height="150">
     {% endif %}
 </div>
-<br>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form2.as_p }}
+    <button type="submit" name="submit_button" class="btn btn-warning" value="form2">ذخیره</button>
+</form>
+
+<a href="{% url 'logout' %}"><button class="btn btn-danger ">خروج</button></a>
+
 
 <script>
     document.getElementById("submitedit").disabled = true 

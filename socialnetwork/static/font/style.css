@@ -10,6 +10,9 @@
 body,html {
     font-family: 'mycustomfont' !important;
 }
+a{
+    text-decoration: none !important;
+}
 .errorlist {
     color:red !important;
 }
@@ -18,5 +21,5 @@ body,html {
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #ddd; /* اختیاری: اضافه کردن حاشیه */
+    border: 2px solid #ddd; 
 }

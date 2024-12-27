@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile,Post
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
@@ -60,7 +60,18 @@ class ProfileForm(forms.ModelForm):
 class ProfileImage(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_image',]
+        fields = ['profile_image','bio']
+        
         widgets = {
             'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'bio':forms.Textarea(attrs={'class': 'form-control','placeholder':'بیوگرافی'})
+        }
+
+class postform(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title','content','author']
+        labels={
+            'title':'عنوان',
+            'content':'',
         }
