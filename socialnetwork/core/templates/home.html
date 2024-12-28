@@ -19,9 +19,12 @@
                                 <div class="container" style="padding: 1rem;">
                                     <div class="row">
                                         <div class="col-1">
-                                            {{ profile }}
-                                            <img src="/media/profile_images/default.png" width="30px" height="30px">
-                                        </div>
+                                            {% for pic in profilepics%}
+                                                {% if pic.user_id == post.author_id %}
+                                                     <img src="/media/{{ pic.profile_image }}" width="30px" height="30px" style="width: 40px; height:40px; position: relative; border: 3px solid black; border-radius: 100%; ">
+                                                {% endif %}
+                                            {% endfor %}
+                                         </div>
                                         <div class="col-1">
                                             <b>{{ post.author.username }}@</b>
                                         </div>

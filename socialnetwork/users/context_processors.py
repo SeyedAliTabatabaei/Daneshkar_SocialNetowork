@@ -3,10 +3,11 @@ from .models import Profile
 
 
 def profilepic(request):
+    profiles = Profile.objects.all()
     if not request.user.is_authenticated:
-        return {'profilepic': None}
+        return {'profilepic': None, 'profilepics': profiles}
     try:
         profile = Profile.objects.get(user=request.user)
     except:
         profile = None
-    return {'profilepic': profile}
+    return {'profilepic': profile,'profilepics':profiles}
