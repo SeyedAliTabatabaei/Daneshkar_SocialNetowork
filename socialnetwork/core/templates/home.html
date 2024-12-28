@@ -10,28 +10,63 @@
 
     <div class="container-sm border pt-4">
         <div class="row justify-content-center">
-            <div class="col-8">
+            <div class="col-8  " style="padding: 2rem;">
                 {% for post in posts %}
                     {{ post_profile }}
-                    <div class="container border">
+                    <div class="container bg-light border">
                         <div class="row justify-content-center">
-                            <div class="col-8">
-                                <div class="container" style="padding: 1rem;">
+                            <div class="col-8 " style="padding: 2rem;">
+                                
+                                <div class="container bg-white   p-0">
+                                    <hr>
                                     <div class="row">
                                         <div class="col-1">
                                             {% for pic in profilepics%}
-                                                {% if pic.user_id == post.author_id %}
+                                                {% if pic.user_id == post.post.author_id %}
                                                      <img src="/media/{{ pic.profile_image }}" width="30px" height="30px" style="width: 40px; height:40px; position: relative; border: 3px solid black; border-radius: 100%; ">
                                                 {% endif %}
                                             {% endfor %}
                                          </div>
-                                        <div class="col-1">
-                                            <b>{{ post.author.username }}@</b>
+                                        <div class="col-2">
+                                            <b>{{ post.post.author.username }}@</b>
                                         </div>
+                                        <div class="col-3">
+                                            <small class="text-secondary"><b>{{ post.time_ago }} پیش</b></small>
+                                        </div>
+                                        
                                     </div>
                                 </div>
-                                <h3> {{ post.title}}</h3>
-                                {{ post.content|safe }}
+                                <div class="container bg-white" >
+                                    
+                                    <div class="row justify-content-center">
+                                       
+                                        <div class="col-12  " style="text-align-last: right;">
+                                            <hr>
+                                            <h5><b><i>{{ post.post.title}}</i></b></h5>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-6">
+                                            <p style="text-align-last: right; width: 100%;">
+                                                {{ post.post.content|safe }}
+                                            </p>
+                                            
+                                        </div>
+                                        <div class="col-3">
+                                            <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="like" style="width: 25px;" stroke="black" fill="none" stroke-width="1" style="width: 30px;" >
+                                                <path d="M2 6.342a3.375 3.375 0 0 1 6-2.088 3.375 3.375 0 0 1 5.997 2.26c-.063 2.134-1.618 3.76-2.955 4.784a14.437 14.437 0 0 1-2.676 1.61c-.02.01-.038.017-.05.022l-.014.006-.004.002h-.002a.75.75 0 0 1-.592.001h-.002l-.004-.003-.015-.006a5.528 5.528 0 0 1-.232-.107 14.395 14.395 0 0 1-2.535-1.557C3.564 10.22 1.999 8.558 1.999 6.38L2 6.342Z" />
+                                            </svg>
+                                            <svg id="comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="comment" style="width: 20px;" stroke="black" fill="none" stroke-width="1" >
+                                                <path fill-rule="evenodd" d="M1 8c0-3.43 3.262-6 7-6s7 2.57 7 6-3.262 6-7 6c-.423 0-.838-.032-1.241-.094-.9.574-1.941.948-3.06 1.06a.75.75 0 0 1-.713-1.14c.232-.378.395-.804.469-1.26C1.979 11.486 1 9.86 1 8Z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <div class="col-3">
+
+
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
                                                             
                             </div>
                         </div>
