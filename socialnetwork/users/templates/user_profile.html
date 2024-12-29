@@ -1,0 +1,58 @@
+
+{% extends "base.html" %}
+{% block title %}
+
+{% endblock %}
+{% block content %}
+    <div class="container border">
+        <div class="row">
+            <div class="col">
+                {% for profile in profilepics %}
+                    {% if profile.user_id == user.id %}
+                    <img src="/media/{{ profile.profile_image }}" width="60px" class="round-image">
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <H1>{{ user }}</H1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3 border" style="padding: 1rem;">
+                {% for profile in profilepics %}
+                    {% if profile.user_id == user.id %}
+                        <b>بیوگرافی : {{ profile.bio }}</b>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="padding: 0.5rem;">
+                <button class="btn btn-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
+                        <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                    </svg>                      
+                    دنبال کردن
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% for post in allposts %}
+                    {% if post.author_id == user.id %}
+                        <div class="container ">
+                            <div class="row">
+                                <div class="col-3 border " style="padding: 1rem;">
+                                    {{ post.content|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

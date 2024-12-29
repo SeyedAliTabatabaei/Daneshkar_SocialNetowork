@@ -1,0 +1,121 @@
+
+{% extends "base.html" %}
+{% block title %}
+نوشته‌ی{{ post.author }}به نام  {{ post.title  }}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-3">
+                {% for pic in profilepics%}
+                    {% if pic.user_id == post.author_id %}
+                        <img src="/media/{{ pic.profile_image }}" width="30px" height="30px" style="width: 40px; height:40px; position: relative; border: 3px solid black; border-radius: 100%; ">
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <b>
+                     {{post.title}} از {{ post.author}}
+                </b>
+                 |
+                <i class="text-secondary">
+                    <small>
+                        تاریخ انتشار: {{post.created_at}}
+                    </small>
+                </i>
+            </div>
+        </div>
+        <div class="row">
+            <hr>
+            <div class="col-12" style="padding: 2rem;">
+                {{ post.content}}
+            </div>
+            <hr>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6" >
+                <b>نظر کاربران</b>
+                <hr>
+                {% for comment in comments %}
+
+                    <div class="container bg-light" style="padding: 1rem;">
+                        <div class="row ">
+                            <div class="col-2" style=" padding-left: 0;">
+                                {% for pic in profilepics%}
+                                    {% if pic.user_id == comment.user.id %}
+                                        <img src="/media/{{ pic.profile_image }}" width="30px" height="30px" style="width: 40px; height:40px; position: relative; border: 3px solid black; border-radius: 100%; ">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="col-1" style="text-align-last: right; padding: 0.5rem 0 0 0;">
+                               <b> {{ comment.user.username }} </b>
+                            </div>
+                            <div class="col-4" style="text-align-last: right; padding-top: 0.4rem;">
+                                <span style="font-size:9px; ">{{ comment.created_at }}</span>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-6">
+                                <i>{{ comment.content }} </i>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    {% for reply in comment.replies.all %}
+                        <div class="container border bg-light" style="padding: 1rem;">
+                           <div class="row" style="text-align-last: right;">
+                                <div class="col">
+                                    <i class="text-secondary">{{ reply.user.username }} در پاسخ گفته است:</i>
+                                </div>
+                           </div>
+                            <div class="row ">
+                                <div class="col-2" style=" padding-left: 0;">
+                                    {% for pic in profilepics%}
+                                        {% if pic.user_id == comment.user.id %}
+                                            <img src="/media/{{ pic.profile_image }}" width="30px" height="30px" style="width: 40px; height:40px; position: relative; border: 3px solid black; border-radius: 100%; ">
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="col-1" style="text-align-last: right; padding: 0.5rem 0 0 0;">
+                                <b> {{ reply.user.username }} </b>
+                                </div>
+                                <div class="col-4" style="text-align-last: right; padding-top: 0.4rem;">
+                                    <span style="font-size:9px; ">{{ reply.created_at }}</span>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-6">
+                                    <i>{{ reply.content }}</i>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <button class="btn btn-success form-control allow-reply" value="{{ comment.id }}">پاسخ</button>
+                    <form method="post" class="replyform d-none form{{ comment.id }}">
+                        {% csrf_token %}
+                        <textarea name="content" class="form-control" placeholder="پاسخ به این نظر"></textarea>
+                        <input type="hidden" name="parent_comment_id" value="{{ comment.id }}">
+                        <button type="submit" class="btn btn-warning form-control">ارسال پاسخ</button>
+                    </form>
+                
+                <hr>
+                
+                {% endfor %}
+                <h2>ارسال نظر</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">ارسال</button>
+                </form>
+            </div>
+            
+            
+
+
+        </div>
+            <hr>
+        </div>
+    </div>
+{% endblock %}

@@ -33,6 +33,11 @@
         $('.comment').mouseout(function() {
             $(this).attr('fill', 'white');
         });
+        $(".allow-reply").on("click", function() {
+           var id =  $(this).attr('value');
+           $(this).addClass("d-none");
+           $(".form" + id).removeClass('d-none');
+        });
     </script>
 </body>
 </html>

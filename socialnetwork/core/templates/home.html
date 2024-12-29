@@ -28,7 +28,9 @@
                                             {% endfor %}
                                          </div>
                                         <div class="col-2">
-                                            <b>{{ post.post.author.username }}@</b>
+                                            <a href="{% url 'user_profile' post.post.author_id %}"> 
+                                                <b>{{ post.post.author.username }}@</b>
+                                            </a>
                                         </div>
                                         <div class="col-3">
                                             <small class="text-secondary"><b>{{ post.time_ago }} پیش</b></small>
@@ -42,7 +44,10 @@
                                        
                                         <div class="col-12  " style="text-align-last: right;">
                                             <hr>
-                                            <h5><b><i>{{ post.post.title}}</i></b></h5>
+                                            <a href="{% url 'post_detail' post.post.id %}">
+                                                <h5><b><i>{{ post.post.title}}</i></b></h5>
+                                            </a>
+                                            
                                         </div>
                                     </div>
                                     <div class="row ">

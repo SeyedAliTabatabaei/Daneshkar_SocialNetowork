@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate,logout
-from .forms import SignupForm,LoginForm,ProfileForm,ProfileImage,postform
-from .models import Profile
+from .forms import SignupForm,LoginForm,ProfileForm,ProfileImage,postform,CommentForm
+from .models import Profile,Post,Comment
+from django.contrib.auth.models import User
 
 def signup_view(request):
     if request.method == 'POST':
@@ -35,6 +36,29 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST, post=post)
+        if form.is_valid():
+            form.save(user=request.user)
+            return redirect('post_detail', post_id=post.id)
+    else:
+        form = CommentForm(post=post)
+
+    comments = post.comments.filter(parent__isnull=True) 
+    replies = post.comments.filter(parent__isnull=False) 
+
+    return render(request, 'post_detail.html', {
+        'post': post,
+        'comments': comments,
+        'replies': replies,
+        'form': form,
+    })
+def user_profile(request,user_id):
+    user = User.objects.get(id=user_id)
+    return render(request, 'user_profile.html',{'user':user})
 @login_required
 def profile_view(request):
     try:

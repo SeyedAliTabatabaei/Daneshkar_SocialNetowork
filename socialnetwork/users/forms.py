@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Profile,Post
+from .models import Profile,Post,Comment
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
@@ -75,3 +75,28 @@ class postform(forms.ModelForm):
             'title':'عنوان',
             'content':'',
         }
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        labels={
+            'content':'',
+        }
+        widgets = {
+            'content':forms.Textarea(attrs={'class':'form-control','placeholder':'نظر خود را وارد کنید'})
+        }
+    parent_comment_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    def __init__(self, *args, **kwargs):
+        self.post = kwargs.pop('post', None) 
+        super().__init__(*args, **kwargs)
+    def save(self, user, *args, **kwargs):
+        comment = super().save(commit=False)
+        comment.user = user
+        comment.post = self.post
+        parent_comment_id = self.cleaned_data.get('parent_comment_id')
+        
+        if parent_comment_id:
+            comment.parent = Comment.objects.get(id=parent_comment_id)
+        
+        comment.save()
+        return comment
