@@ -70,7 +70,7 @@ class ProfileImage(forms.ModelForm):
 class postform(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title','content','author']
+        fields = ['title','content',]
         labels={
             'title':'عنوان',
             'content':'',
@@ -100,3 +100,10 @@ class CommentForm(forms.ModelForm):
         
         comment.save()
         return comment
+    
+class UserSearchForm(forms.Form):
+    query = forms.CharField(
+            max_length=150,
+            label="نام کاربر",
+            widget=forms.TextInput(attrs={'placeholder': 'نام کاربر را وارد کنید...'})
+        )

@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate,logout
-from .forms import SignupForm,LoginForm,ProfileForm,ProfileImage,postform,CommentForm
+from .forms import *
 from .models import Profile,Post,Comment
 from django.contrib.auth.models import User
 
@@ -58,7 +58,19 @@ def post_detail(request, post_id):
     })
 def user_profile(request,user_id):
     user = User.objects.get(id=user_id)
-    return render(request, 'user_profile.html',{'user':user})
+    return render(request, 'user_profile.html',{'user':user,'userid':user_id},)
+
+def search_users(request):
+    form = UserSearchForm()
+    results = None
+
+    if request.GET.get('query'): 
+        query = request.GET['query']
+        results = User.objects.filter(username__icontains=query) 
+
+    return render(request, 'search.html', {'form': form, 'results': results})
+
+
 @login_required
 def profile_view(request):
     try:
@@ -101,10 +113,29 @@ def write_view(request):
     if request.method == 'POST':
         form = postform(request.POST)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
             return HttpResponse("پست منتشر شد")
         else:
             print(form.errors)
     else:
         form = postform()
     return render(request, 'write.html', {'form':form})
+
+
+def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.user == post.author:  
+        post.delete()
+        return redirect('home')
+    else:
+        return redirect('home')
+
+def ajax_search_users(request):
+    query = request.GET.get('query', '') 
+    results = []
+    if query:
+        users = User.objects.filter(username__icontains=query)[:10] 
+        results = [{'id': user.id, 'username': user.username} for user in users]
+    return JsonResponse({'results': results})

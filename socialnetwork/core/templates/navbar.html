@@ -9,9 +9,10 @@
         <li class="nav-item active">
           <a class="nav-link" href="{% url 'home' %}">خانه</a>
         </li>
-        {% if user.is_authenticated %}
-          <li class="nav-item">   
-            <a class="nav-link" href="{% url 'profile' %}">پروفایل  / <b><span style="font-size: 12px;">{{ user.username }}</span></b></a>
+        {% if request.user.is_authenticated %}
+          <li class="nav-item"> 
+              
+            <a class="nav-link" href="{% url 'user_profile' request.user.id  %}">پروفایل  / <b><span style="font-size: 12px;">{{ request.user.username }}</span></b></a>
           </li>
           <li class="nav-item">
             {% if profilepic.profile_image %}
@@ -20,6 +21,13 @@
               <img src="/media/profile_images/default.png " style="width: 40px; height:40px; position: relative; border: 3px solid black; border-radius: 100%; " >
             {% endif %}
 
+          </li>
+          <li class="nav-item">   
+            <a class="nav-link" href="{% url 'profile' %}">
+              <svg xmlns="http://www.w3.org/2000/svg" style="width: 20px;" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+              </svg>              
+              ویرایش پروفایل</a>
           </li>
           <li class="nav-item"> 
             <div class="container">
@@ -53,7 +61,13 @@
         </li>
         
         {% endif %}
-      
+        <li class="nav-item">
+          <form method="get" autocomplete="off" action="/search">
+              {% csrf_token %}
+              <input type="text" class="form-control" id="search" name="query" placeholder="نام کاربر">
+              <div id="dropdown"></div>
+          </form>
+        </li>
       </ul>
     <!-- <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

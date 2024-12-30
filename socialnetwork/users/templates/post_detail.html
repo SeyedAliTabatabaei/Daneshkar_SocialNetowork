@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-12">
                 <b>
-                     {{post.title}} از {{ post.author}}
+                     {{post.title}} از <a href="{% url 'user_profile' post.author_id %}">{{ post.author}} </a>
                 </b>
                  |
                 <i class="text-secondary">
@@ -30,7 +30,7 @@
         <div class="row">
             <hr>
             <div class="col-12" style="padding: 2rem;">
-                {{ post.content}}
+                {{ post.content|safe}}
             </div>
             <hr>
         </div>

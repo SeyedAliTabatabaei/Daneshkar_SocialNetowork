@@ -9,4 +9,7 @@ urlpatterns = [
     path('write/',views.write_view,name='write'),
     path('post/<int:post_id>/', views.post_detail, name='post_detail'),
     path('user/<int:user_id>/', views.user_profile, name='user_profile'),
+    path('post/<int:pk>/delete/', views.delete_post, name='post_delete'),
+    path('search/', views.search_users, name='search_users'),
+    path('ajax/search-users/', views.ajax_search_users, name='ajax_search_users'),
 ]

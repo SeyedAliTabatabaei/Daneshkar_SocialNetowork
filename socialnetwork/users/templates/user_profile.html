@@ -29,30 +29,66 @@
             </div>
         </div>
         <div class="row">
-            <div class="col" style="padding: 0.5rem;">
-                <button class="btn btn-success">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
-                        <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-                    </svg>                      
-                    دنبال کردن
-                </button>
-            </div>
+
+            {% if user.is_authenticated %}
+                {% if request.user.id == userid %}
+                    <div class="col" style="padding: 0.5rem;">
+                        <a href="{% url 'profile' %}">
+                            <button class="btn btn-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
+                                    <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                                </svg>                      
+                            ویرایش پروفایل
+                            </button>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="col" style="padding: 0.5rem;">
+                        <button class="btn btn-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
+                                <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                            </svg>                      
+                            دنبال کردن
+                        </button>
+                    </div>
+                {% endif %}
+
+            {% endif %}
+            
         </div>
         <div class="row">
-            <div class="col">
-                {% for post in allposts %}
-                    {% if post.author_id == user.id %}
-                        <div class="container ">
-                            <div class="row">
-                                <div class="col-3 border " style="padding: 1rem;">
+            {% for post in allposts %}
+                {% if post.author_id == user.id %}
+                    <div class="col-4">
+                        <div class="container h-100 " >
+                            <div class="row border justify-content-center">
+                                <div class="col-8  " style="padding: 1rem;">
+                                    <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
+                                </div>
+                                <div class="col-4 pt-2">
+                                    {% if request.user == post.author %}
+                                        <form method="post" action="{% url 'post_delete' post.pk %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('آیا مطمئن هستید؟');">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="width: 1rem;" fill="currentColor" class="size-4">
+                                                    <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+                                                  </svg>
+                                                      
+                                                حذف
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row h-100">
+                                <div class="col-12 border bg-light " style="padding: 1rem;">
                                     {{ post.content|safe }}
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
-                {% endfor %}
-
-            </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
