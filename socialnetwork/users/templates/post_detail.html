@@ -104,11 +104,15 @@
                 
                 {% endfor %}
                 <h2>ارسال نظر</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">ارسال</button>
-                </form>
+                {% if user.is_authenticated %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">ارسال</button>
+                    </form>
+                {% else %}
+                    لطفا برای ارسال نظر ابتدا <a href="{% url 'login' %}">وارد</a>شوید
+                {% endif %}
             </div>
             
             
