@@ -10,6 +10,9 @@
           <a class="nav-link" href="{% url 'home' %}">خانه</a>
         </li>
         {% if request.user.is_authenticated %}
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'followings' %}">پست های دنبال شوندگان </a>
+          </li>
           <li class="nav-item"> 
               
             <a class="nav-link" href="{% url 'user_profile' request.user.id  %}">پروفایل  / <b><span style="font-size: 12px;">{{ request.user.username }}</span></b></a>

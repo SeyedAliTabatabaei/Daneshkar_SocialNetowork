@@ -13,4 +13,7 @@ urlpatterns = [
     path('search/', views.search_users, name='search_users'),
     path('ajax/search-users/', views.ajax_search_users, name='ajax_search_users'),
     path('reaction/<int:post_id>/', views.reaction, name='reaction'),
+    path('follow/<int:user_id>/', views.follow_user, name='follow_user'),
+    path('unfollow/<int:user_id>/', views.unfollow_user, name='unfollow_user'),
+    path('followings/', views.followings, name='followings'),
 ]

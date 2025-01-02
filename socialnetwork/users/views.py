@@ -6,6 +6,8 @@ from django.contrib.auth import login, authenticate,logout
 from .forms import *
 from .models import Profile,Post,Comment
 from django.contrib.auth.models import User
+from django.utils.timesince import timesince
+from django.utils.timezone import now
 
 def signup_view(request):
     if request.method == 'POST':
@@ -58,7 +60,12 @@ def post_detail(request, post_id):
     })
 def user_profile(request,user_id):
     user = User.objects.get(id=user_id)
-    return render(request, 'user_profile.html',{'user':user,'userid':user_id},)
+    followings = Follow.objects.filter(follower = request.user, following = user_id ).values_list("following")
+    if followings.count() >= 1:
+        isfollow = True
+    else:
+        isfollow = False
+    return render(request, 'user_profile.html',{'user':user,'userid':user_id,'isfollow':isfollow})
 
 def search_users(request):
     form = UserSearchForm()
@@ -157,3 +164,40 @@ def reaction(request, post_id):
         return JsonResponse({'status': 'added', 'reaction_type': reaction_type, 
                              'likes_count': post.likes_count(),
                              'dislikes_count': post.dislikes_count()})
+    
+def translate_timesince(time_diff):
+    english_time = timesince(time_diff,now())
+
+    translated_time = (
+        english_time.replace("minutes", "دقیقه")
+        .replace("minute", "دقیقه")
+        .replace("hours", "ساعت")
+        .replace("hour", "ساعت")
+        .replace("days", "روز")
+        .replace("day", "روز")
+        .replace("weeks", "هفته")
+        .replace("week", "هفته")
+    )
+    return f"{translated_time} پیش"
+
+def follow_user(request, user_id):
+    user_to_follow = get_object_or_404(User, id=user_id)
+    if request.user != user_to_follow:
+        Follow.objects.get_or_create(follower=request.user, following=user_to_follow)
+    return redirect('user_profile', user_id=user_id)
+
+def unfollow_user(request, user_id):
+    user_to_unfollow = get_object_or_404(User, id=user_id)
+    Follow.objects.filter(follower=request.user, following=user_to_unfollow).delete()
+    return redirect('user_profile', user_id=user_id)
+
+def followings(request):
+    following_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
+    allposts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+    posts = []
+    for post in allposts:
+        posts.append({
+            'post': post,
+            'time_ago': f"{translate_timesince(post.created_at)}"
+        }) 
+    return render(request, 'followings.html', {'posts': posts})
