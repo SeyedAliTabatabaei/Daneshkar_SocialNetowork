@@ -17,14 +17,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $('.like').mouseover(function() {
-            $(this).css('cursor', 'pointer'); 
-            $(this).attr('fill', 'red');
-        });
-
-        $('.like').mouseout(function() {
-            $(this).attr('fill', 'white');
-        });
+         $('.like').mouseover(function() {
+             $(this).css('cursor', 'pointer'); 
+            
+         });
+         $('.dislikeactive').mouseover(function() {
+             $(this).css('cursor', 'pointer'); 
+            
+         });
+         $('.liked').attr('fill','red');
+      
+        // $('.lik}e').mouseout(function() {
+        //     $(this).attr('fill', 'white');
+        // });
         $('.comment').mouseover(function() {
             $(this).css('cursor', 'pointer'); 
             $(this).attr('fill', 'aqua');
@@ -41,6 +46,18 @@
 
         $(document).ready(function() {
 
+            document.querySelectorAll('.liked').forEach(function(element){
+                datapostid = element.getAttribute('data-post-id');
+                datapostid = 'button'+datapostid
+                $('.'+datapostid).addClass('d-none');
+            });
+            document.querySelectorAll('.disliked').forEach(function(element){
+                datapostid = element.getAttribute('data-post-id');
+                datapostid = 'dislikebutton'+datapostid
+                $('.'+datapostid).addClass('d-none');
+            });
+
+            
             $("#search").on("input", function() {
                 const query = $(this).val();
                 if (query.length > 0) {
@@ -82,6 +99,48 @@
                 }
             });
         });
+
+        document.querySelectorAll('.like-btn, .dislike-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            location.reload();
+        const postId = this.getAttribute('data-post-id');
+        const reactionType = this.getAttribute('data-reaction-type');
+
+        fetch(`/reaction/${postId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            body: new URLSearchParams({ reaction_type: reactionType }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'added') {
+                
+                // alert(`${reactionType} لایک شد`);
+                if (reactionType === 'like') {
+                    this.classList.remove('like');
+                    this.setAttribute('fill','red');
+                    this.parentElement.querySelector('.dislike-btn').disabled = false; 
+                    location.reload();
+                }
+                if (reactionType === 'dislike') {
+                    this.disabled = true;
+                    this.parentElement.querySelector('.like-btn').disabled = true;        
+                    location.reload();
+                }
+            }
+             else {
+                location.reload();
+
+
+            }
+            location.reload();
+            this.parentElement.querySelector('.like-btn').textContent = `👍 لایک (${data.likes_count})`;
+            this.parentElement.querySelector('.dislike-btn').textContent = `👎 دیس لایک (${data.dislikes_count})`;
+        });
+    });
+});
     </script>
 </body>
 </html>

@@ -38,7 +38,15 @@
                 </div>
             </div>
           </li>
-          <li class="nav-item mt-1">
+          <li class="nav-item"  style="width: 80px; text-align: center;  border: 3px solid red;">
+            <a href="{% url 'logout' %}" style="color: red;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="width: 30px ; height:30px" fill="red" class="size-4">
+                <path fill-rule="evenodd" d="M2.75 2a.75.75 0 0 1 .75.75v6.5h7.94l-.97-.97a.75.75 0 0 1 1.06-1.06l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H2.75A.75.75 0 0 1 2 10V2.75A.75.75 0 0 1 2.75 2Z" clip-rule="evenodd" />
+              </svg>
+              <b>خروج</b> 
+            </a>
+          </li>
+          <li class="nav-item" style="width: 150px; margin-right: 1rem; text-align: center;  border: 3px solid green;">
             <a href="{% url 'write' %}">
               <b style="color: green;">
                 پست جدید
@@ -52,6 +60,7 @@
             
             <i class="fa-solid fa-pencil"></i>
           </li>
+
         {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'login' %}">ورود</a>

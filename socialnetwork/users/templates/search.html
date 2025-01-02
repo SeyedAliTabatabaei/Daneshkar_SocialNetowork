@@ -9,17 +9,32 @@
             <div class="col">
                 {% if results %}
                     <h2>نتایج جستجو:</h2>
-                    <ul>
-                        {% for user in results %}
-                            <li>
-                                <a href="{% url 'user_profile' user.id %}">
-                                    {{ user.username }}
-                                </a>
-                            </li>
-                        {% empty %}
-                            <li>کاربری یافت نشد.</li>
-                        {% endfor %}
-                    </ul>
+                        <hr>
+                        <ul>
+                            {% for user in results %}
+                                <li>
+                                    <div class="container pb-3">
+                                        <div class="row ">
+                                            <div class="col-1 p-0">
+                                                {% for pic in profilepics%}
+                                                    {% if pic.user_id == user.id %}
+                                                        <img src="/media/{{ pic.profile_image }}" width="30px" height="30px" style="width: 40px; height:40px; position: relative; border: 3px solid black; border-radius: 100%; ">
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col-3  p-0 pt-2" style="text-align-last: right;">
+                                                <a href="{% url 'user_profile' user.id %}">
+                                                    {{ user.username }}
+                                                </a>
+                                            <hr>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% empty %}
+                                <li>کاربری یافت نشد.</li>
+                            {% endfor %}
+                        </ul>
                 {% endif %}
             </div>
         </div>

@@ -139,3 +139,21 @@ def ajax_search_users(request):
         users = User.objects.filter(username__icontains=query)[:10] 
         results = [{'id': user.id, 'username': user.username} for user in users]
     return JsonResponse({'results': results})
+
+
+def reaction(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        reaction_type = request.POST.get("reaction_type")
+        reaction, created = Reaction.objects.get_or_create(user=request.user, post=post)
+
+        if not created and reaction.reaction_type == reaction_type:
+            reaction.delete()
+            return JsonResponse({'status': 'removed'})
+        
+        reaction.reaction_type = reaction_type
+        reaction.save()
+
+        return JsonResponse({'status': 'added', 'reaction_type': reaction_type, 
+                             'likes_count': post.likes_count(),
+                             'dislikes_count': post.dislikes_count()})

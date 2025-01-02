@@ -17,7 +17,12 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  
     updated_at = models.DateTimeField(auto_now=True)  
     is_published = models.BooleanField(default=True) 
+    
+    def likes_count(self):
+        return self.reactions.filter(reaction_type='like').count()
 
+    def dislikes_count(self):
+        return self.reactions.filter(reaction_type='dislike').count()
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
@@ -26,3 +31,13 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
 
+
+class Reaction(models.Model):
+    reactions= [('like', 'Like'),('dislike', 'Dislike'),]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reactions')
+    reaction_type = models.CharField(max_length=10, choices=reactions)
+    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta: 
+        unique_together = ('user', 'post')
