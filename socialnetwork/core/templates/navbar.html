@@ -13,6 +13,11 @@
           <li class="nav-item active">
             <a class="nav-link" href="{% url 'followings' %}">پست های دنبال شوندگان </a>
           </li>
+          
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'followed_tags_posts' %}">پست های تگ های دنبال شده </a>
+          </li>
+
           <li class="nav-item"> 
               
             <a class="nav-link" href="{% url 'user_profile' request.user.id  %}">پروفایل  / <b><span style="font-size: 12px;">{{ request.user.username }}</span></b></a>

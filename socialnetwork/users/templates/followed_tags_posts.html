@@ -1,22 +1,17 @@
 {% extends "base.html" %}
 {% block title %}
-تگ {{ tag.name }}
+تگ های دنبال شده
 {% endblock %}
 
 {% block content %}
+<h3 class="text-center">تگ های دنبال شده</h3>
+    {% for tag in following%}
+        <a href="{% url 'tag_posts' tag.id %}">
+            <button class="btn btn-secondary">{{ tag }}</button>
+        </a>
+    {% endfor %}
 
-
-<h3 class="text-center">پست‌های مرتبط با تگ "{{ tag.name }}"</h3>
-{% if request.user.is_authenticated %}
-        {% if isfollow %}
-            <a href="{% url 'unfollow_tag' tag.id %}" class="btn btn-danger">حذف از دنبال</a>
-            {% else %}
-            <a href="{% url 'follow_tag' tag.id %}" class="btn btn-primary">دنبال کردن این تگ</a>
-        {% endif %}
-    {% else %}
-        <span>برای دنبال کردن این تگ لطفا ابتدا <a href="{% url 'login' %}">وارد</a>شوید</span>
-{% endif%}
-<div class="container-sm border pt-4">
+    <div class="container-sm border pt-4">
         <div class="row justify-content-center">
             <div class="col-8  " style="padding: 2rem;">
                 {% for post in posts %}

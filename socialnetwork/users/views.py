@@ -147,15 +147,36 @@ def write_view(request):
 def tag_posts(request, tag_id):
     tag = get_object_or_404(Tag, id=tag_id)
     allposts = Post.objects.filter(tags=tag).order_by('-created_at')
+    if request.user.is_authenticated:
+        isfollow = FollowTag.objects.filter(tag=tag_id).values_list("tag")
+        if isfollow.count() >= 1:
+            isfollow = True
+        else:
+            isfollow = False
+    else:
+        isfollow = False
+
     posts = []
     for post in allposts:
         posts.append({
             'post': post,
             'time_ago': f"{translate_timesince(post.created_at)}"
         }) 
-    return render(request, 'tag_posts.html', {'tag': tag, 'posts': posts})
+    return render(request, 'tag_posts.html', {'tag': tag, 'posts': posts,'isfollow':isfollow})
 
-
+@login_required
+def follow_tag(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    user = request.user
+    if not FollowTag.objects.filter(user=user, tag=tag).exists():
+        FollowTag.objects.create(user=user, tag=tag)
+    return redirect('tag_posts', tag_id=tag.id)
+def unfollow_tag(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    user = request.user
+    if FollowTag.objects.filter(user=user, tag=tag).exists():
+        FollowTag.objects.filter(user=user, tag=tag).delete()
+    return redirect('tag_posts', tag_id=tag.id)
 
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -227,3 +248,18 @@ def followings(request):
             'time_ago': f"{translate_timesince(post.created_at)}"
         }) 
     return render(request, 'followings.html', {'posts': posts})
+
+
+@login_required
+def followed_tags_posts(request):
+    user = request.user
+    followed_tags = FollowTag.objects.filter(user=user).values_list('tag', flat=True)
+    following = Tag.objects.filter(id__in=followed_tags)
+    allposts = Post.objects.filter(tags__id__in=followed_tags).distinct().order_by('-created_at')
+    posts = []
+    for post in allposts:
+        posts.append({
+            'post': post,
+            'time_ago': f"{translate_timesince(post.created_at)}"
+        }) 
+    return render(request, 'followed_tags_posts.html', {'posts': posts,'following':following})
