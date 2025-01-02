@@ -1,5 +1,5 @@
 from .models import Profile,Post,Reaction
-from django.contrib.auth.decorators import login_required
+
 
 
 def profilepic(request):
@@ -15,8 +15,9 @@ def profilepic(request):
     return {'profilepic': profile,'profilepics':profiles,'allposts':allposts,}
 
 def reaction(request):
+    allposts = Post.objects.all()
     if(request.user.is_authenticated):
       reactions = Reaction.objects.filter(user=request.user)
     else:
         reactions = None
-    return {'reactions':reactions}
+    return {'reactions':reactions,'allposts':allposts}

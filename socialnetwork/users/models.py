@@ -4,7 +4,18 @@ from ckeditor.fields import RichTextField
 
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)  
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+class FollowTag(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followed_tags')
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='followers')
+
+    class Meta:
+        unique_together = ('user', 'tag') 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_image = models.ImageField(upload_to='profile_images/', default="profile_images/default.png", blank=False, null=False)
@@ -14,6 +25,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200) 
     content = RichTextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts") 
+    tags = models.ManyToManyField(Tag, related_name="posts", blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)  
     updated_at = models.DateTimeField(auto_now=True)  
     is_published = models.BooleanField(default=True) 

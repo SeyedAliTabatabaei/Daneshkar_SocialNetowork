@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}
+تگ {{ tag.name }}
+{% endblock %}
+
+{% block content %}
+<h3 class="text-center">پست‌های مرتبط با تگ "{{ tag.name }}"</h3>
+
+
+    <div class="container-sm border pt-4">
+        <div class="row justify-content-center">
+            <div class="col-8  " style="padding: 2rem;">
+                {% for post in posts %}
+                    {{ post_profile }}
+                    <div class="container bg-light border">
+                        <div class="row justify-content-center">
+                            <div class="col-8 " style="padding: 2rem;">
+                                
+                                <div class="container bg-white   p-0">
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-1">
+                                            {% for pic in profilepics%}
+                                                {% if pic.user_id == post.post.author_id %}
+                                                     <img src="/media/{{ pic.profile_image }}" width="30px" height="30px" style="width: 40px; height:40px; position: relative; border: 3px solid black; border-radius: 100%; ">
+                                                {% endif %}
+                                            {% endfor %}
+                                         </div>
+                                        <div class="col-2">
+                                            <a href="{% url 'user_profile' post.post.author_id %}"> 
+                                                <b>{{ post.post.author.username }}@</b>
+                                                  {{ profilepic.profilepics }} 
+                                            </a>
+                                        </div>
+                                        <div class="col-3">
+                                            <small class="text-secondary"><b>{{ post.time_ago }} پیش</b></small>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="container bg-white" >
+                                    
+                                    <div class="row justify-content-center">
+                                       
+                                        <div class="col-12  " style="text-align-last: right;">
+                                            <hr>
+                                            <a href="{% url 'post_detail' post.post.id %}">
+                                                <h5><b><i>{{ post.post.title}}</i></b></h5>
+                                            </a>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-6">
+                                            <p class="contentholder" style="text-align-last: right; width: 100%;">
+                                                {{ post.post.content|safe }}
+                                            </p>
+                                            
+
+                                        </div>
+                                        <div class="col-6" >
+                                            <svg class="like-btn like button{{post.post.id}}" data-post-id="{{ post.post.id }}" data-reaction-type="like"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"  style="width: 25px;" stroke="black" fill="none" stroke-width="1" style="width: 30px;" >
+                                                <path d="M2 6.342a3.375 3.375 0 0 1 6-2.088 3.375 3.375 0 0 1 5.997 2.26c-.063 2.134-1.618 3.76-2.955 4.784a14.437 14.437 0 0 1-2.676 1.61c-.02.01-.038.017-.05.022l-.014.006-.004.002h-.002a.75.75 0 0 1-.592.001h-.002l-.004-.003-.015-.006a5.528 5.528 0 0 1-.232-.107 14.395 14.395 0 0 1-2.535-1.557C3.564 10.22 1.999 8.558 1.999 6.38L2 6.342Z" />
+                                                
+                                            </svg>
+                                            <span class="button{{post.post.id}}">{{ post.post.likes_count }}</span>
+
+                                                {% for r in reactions %}
+                                                    {% if r.post_id == post.post.id %}
+                                                        {% if r.reaction_type == 'like' %}
+                                                            <svg class="liked" data-post-id="{{ post.post.id }}" data-reaction-type="like"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"  style="width: 25px;" stroke="black" fill="none" stroke-width="1" style="width: 30px;" >
+                                                                <path d="M2 6.342a3.375 3.375 0 0 1 6-2.088 3.375 3.375 0 0 1 5.997 2.26c-.063 2.134-1.618 3.76-2.955 4.784a14.437 14.437 0 0 1-2.676 1.61c-.02.01-.038.017-.05.022l-.014.006-.004.002h-.002a.75.75 0 0 1-.592.001h-.002l-.004-.003-.015-.006a5.528 5.528 0 0 1-.232-.107 14.395 14.395 0 0 1-2.535-1.557C3.564 10.22 1.999 8.558 1.999 6.38L2 6.342Z" />
+                                                            </svg>
+                                                            {{ post.post.likes_count }}
+                                                            {% else %}
+                                                                <svg class="disliked" data-post-id="{{ post.post.id }}"  xmlns="http://www.w3.org/2000/svg"  style="width: 20px; height:20px" viewBox="0 0 16 16" fill="black"  class="size-4">
+                                                                    <path d="M10.325 3H12v5c-.663 0-1.219.466-1.557 1.037a4.02 4.02 0 0 1-1.357 1.377c-.478.292-.907.706-.989 1.26v.005a9.031 9.031 0 0 0 0 2.642c.028.194-.048.394-.224.479A2 2 0 0 1 5 13c0-.812.08-1.605.234-2.371a.521.521 0 0 0-.5-.629H3C1.896 10 .99 9.102 1.1 8.003A19.827 19.827 0 0 1 2.18 3.215C2.45 2.469 3.178 2 3.973 2h2.703a2 2 0 0 1 .632.103l2.384.794a2 2 0 0 0 .633.103ZM14 2a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1Z" />
+                                                                </svg>
+                                                                {{ post.post.dislikes_count  }}  
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+  
+                                                <svg class="dislike-btn dislikeactive dislikebutton{{post.post.id}}" data-post-id="{{ post.post.id }}" data-reaction-type="dislike" xmlns="http://www.w3.org/2000/svg" stroke="black" style="width: 20px; height:20px" viewBox="0 0 16 16" fill="none" stroke-width="1" class="size-4">
+                                                    <path d="M10.325 3H12v5c-.663 0-1.219.466-1.557 1.037a4.02 4.02 0 0 1-1.357 1.377c-.478.292-.907.706-.989 1.26v.005a9.031 9.031 0 0 0 0 2.642c.028.194-.048.394-.224.479A2 2 0 0 1 5 13c0-.812.08-1.605.234-2.371a.521.521 0 0 0-.5-.629H3C1.896 10 .99 9.102 1.1 8.003A19.827 19.827 0 0 1 2.18 3.215C2.45 2.469 3.178 2 3.973 2h2.703a2 2 0 0 1 .632.103l2.384.794a2 2 0 0 0 .633.103ZM14 2a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1Z" />
+                                                </svg>
+                                                <span class="dislikebutton{{post.post.id}}">{{post.post.dislikes_count}}</span>
+                                                  
+                                                
+                                                <!-- <svg id="comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="comment" style="width: 20px;" stroke="black" fill="none" stroke-width="1" >
+                                                    <path fill-rule="evenodd" d="M1 8c0-3.43 3.262-6 7-6s7 2.57 7 6-3.262 6-7 6c-.423 0-.838-.032-1.241-.094-.9.574-1.941.948-3.06 1.06a.75.75 0 0 1-.713-1.14c.232-.378.395-.804.469-1.26C1.979 11.486 1 9.86 1 8Z" clip-rule="evenodd" />
+                                                </svg> -->
+                                        </div>
+                                        <div class="col-3">
+
+
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                                                            
+                            </div>
+                        </div>
+                    </div>    
+                {% empty %}
+                <p>پستی وجود ندارد!</p>
+                {% endfor %}           
+            </div>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}

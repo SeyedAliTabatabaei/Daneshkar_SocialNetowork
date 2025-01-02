@@ -29,5 +29,6 @@ def home(request):
             'post': post,
             'time_ago': f"{translate_timesince(post.created_at)}"
         })  
+        
     return render(request, 'home.html', {'posts':posts})
 

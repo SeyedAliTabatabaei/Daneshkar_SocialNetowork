@@ -66,15 +66,36 @@ class ProfileImage(forms.ModelForm):
             'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'bio':forms.Textarea(attrs={'class': 'form-control','placeholder':'بیوگرافی'})
         }
+class tagform(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'نام تگ جدید را وارد کنید...'}),
+        }
 
 class postform(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title','content',]
+        fields = ['title','content','tags']
         labels={
             'title':'عنوان',
             'content':'',
         }
+        widgets = {
+            'tags': forms.CheckboxSelectMultiple,
+            }
+        def save(self, commit=True):
+            instance = super().save(commit=False)
+            new_tag = self.cleaned_data.get('new_tag')
+            if new_tag:
+                tag, created = Tag.objects.get_or_create(name=new_tag)
+                instance.tags.add(tag)
+
+            if commit:
+                instance.save()
+                self.save_m2m()
+            return instance
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

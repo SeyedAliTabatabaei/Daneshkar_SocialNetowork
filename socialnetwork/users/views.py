@@ -4,7 +4,7 @@ from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
 from django.contrib.auth import login, authenticate,logout
 from .forms import *
-from .models import Profile,Post,Comment
+from .models import *
 from django.contrib.auth.models import User
 from django.utils.timesince import timesince
 from django.utils.timezone import now
@@ -60,9 +60,12 @@ def post_detail(request, post_id):
     })
 def user_profile(request,user_id):
     user = User.objects.get(id=user_id)
-    followings = Follow.objects.filter(follower = request.user, following = user_id ).values_list("following")
-    if followings.count() >= 1:
-        isfollow = True
+    if request.user.is_authenticated:
+        followings = Follow.objects.filter(follower = request.user, following = user_id ).values_list("following")
+        if followings.count() >= 1:
+            isfollow = True
+        else:
+            isfollow = False
     else:
         isfollow = False
     return render(request, 'user_profile.html',{'user':user,'userid':user_id,'isfollow':isfollow})
@@ -79,6 +82,8 @@ def search_users(request):
 
 
 @login_required
+
+
 def profile_view(request):
     try:
         profiledata = Profile.objects.get(user=request.user)
@@ -118,17 +123,38 @@ def profile_view(request):
 
 def write_view(request):
     if request.method == 'POST':
-        form = postform(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
+        post_form  = postform(request.POST)
+        tag_form = tagform(request.POST)
+        if 'submit_tag' in request.POST:
+            if tag_form.is_valid():
+                tag_form.save()
+        elif 'submit_post' in request.POST:
+            if post_form.is_valid():
+                post = post_form.save(commit=False)
+                post.author = request.user
+                post.save()
+                if post_form.cleaned_data['tags']:  
+                    post_form.save_m2m()  
+               
             return HttpResponse("پست منتشر شد")
         else:
-            print(form.errors)
+            print(post_form.errors)
     else:
-        form = postform()
-    return render(request, 'write.html', {'form':form})
+        post_form = postform()
+        tag_form = tagform()
+    return render(request, 'write.html', {'post_form':post_form,'tag_form':tag_form})
+
+def tag_posts(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    allposts = Post.objects.filter(tags=tag).order_by('-created_at')
+    posts = []
+    for post in allposts:
+        posts.append({
+            'post': post,
+            'time_ago': f"{translate_timesince(post.created_at)}"
+        }) 
+    return render(request, 'tag_posts.html', {'tag': tag, 'posts': posts})
+
 
 
 def delete_post(request, pk):

@@ -6,11 +6,21 @@
 </h1>
 <hr>
 {{ message }}
-<form method="post">
+<form method="POST">
     {% csrf_token %}
-    {{ form.media }}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success" >انتشار</button>
-</form> 
+    {{ post_form.media }}
+    {{ post_form.as_p }}
 
+    <button type="submit" name="submit_post" class="btn btn-success" >انتشار</button>
+
+</form> 
+<hr>
+<form method="POST">
+    {% csrf_token %}
+    <h6>اضافه کردن تگ جدید</h6>
+    {{ tag_form.as_p }}
+    <button type="submit" name="submit_tag" class="btn btn-warning" >اضافه کردن تگ جدید</button>
+</form>
+<br>
+<hr>
 {% endblock %}

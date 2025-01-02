@@ -28,49 +28,52 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="row">
-
-            {% if user.is_authenticated %}
-                {% if request.user.id == userid %}
-                    <div class="col" style="padding: 0.5rem;">
-                        <a href="{% url 'profile' %}">
-                            <button class="btn btn-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
-                                    <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-                                </svg>                      
-                            ویرایش پروفایل
-                            </button>
-                        </a>
-                    </div>
+    <div class="row">
+        {% if request.user.is_authenticated %}
+            {% if request.user.id == userid %}
+                <div class="col" style="padding: 0.5rem;">
+                <a href="{% url 'profile' %}">
+                <button class="btn btn-success">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
+                <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                </svg>                      
+                ویرایش پروفایل
+                </button>
+                </a>
+                </div>
                 {% else %}
                     <div class="col" style="padding: 0.5rem;">
-                       {% if isfollow %}
+                        {% if isfollow %}
                             <a href="{% url 'unfollow_user' userid %}">
-                                <button class="btn btn-danger">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
-                                        <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-                                    </svg>                      
-                                    حذف از دنبال شوندگان
-                                </button>
+                            <button class="btn btn-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
+                            <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                            </svg>                      
+                            حذف از دنبال شوندگان
+                            </button>
                             </a>   
                             {% else %}
 
                                 <a href="{% url 'follow_user' userid %}">
-                                    <button class="btn btn-success">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
-                                            <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-                                        </svg>                      
-                                        دنبال کردن
-                                    </button>
+                                <button class="btn btn-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" style="width: 20px;">
+                                <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                                </svg>                      
+                                دنبال کردن
+                                </button>
                                 </a>
                         {% endif %}
                     </div>
-                {% endif %}
-
             {% endif %}
-            
-        </div>
+            {% else %}<hr>
+                    <span>
+                        برای دنبال کردن این کاربر ابتدا<a href="{% url 'login' %}">وارد شوید</a>
+                    </span><br><br><hr>
+        {% endif %}     
+
+    </div>
         <div class="row">
+          
             {% for post in allposts %}
                 {% if post.author_id == user.id %}
                     <div class="col-4">

@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout/',views.logout_view,name='logout'),
     path('write/',views.write_view,name='write'),
     path('post/<int:post_id>/', views.post_detail, name='post_detail'),
+    path('tag/<int:tag_id>/', views.tag_posts, name='tag_posts'),
     path('user/<int:user_id>/', views.user_profile, name='user_profile'),
     path('post/<int:pk>/delete/', views.delete_post, name='post_delete'),
     path('search/', views.search_users, name='search_users'),
@@ -16,4 +17,5 @@ urlpatterns = [
     path('follow/<int:user_id>/', views.follow_user, name='follow_user'),
     path('unfollow/<int:user_id>/', views.unfollow_user, name='unfollow_user'),
     path('followings/', views.followings, name='followings'),
+    
 ]
